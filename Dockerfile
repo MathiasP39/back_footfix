@@ -31,7 +31,7 @@ COPY --chown=node:node ./package*.json ./
 
 RUN npm cache clean --force
 # We run NPM CI to install the exact versions of dependencies
-RUN npm ci
+# RUN npm ci
 
 # Lastly, we copy all the files with active user
 COPY --chown=node:node . .
@@ -67,7 +67,7 @@ ENV HOST=0.0.0.0
 COPY --chown=node:node ./package*.json ./
 
 # We run NPM CI to install the exact versions of dependencies
-RUN npm ci --omit=dev
+# RUN npm ci --omit=dev
 
 # Copy files to the working directory from the build folder the user
 COPY --chown=node:node --from=build /home/node/app/build .

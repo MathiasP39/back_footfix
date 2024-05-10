@@ -22,7 +22,8 @@ router
     router.post('/auth/register', [UsersController, 'register'])
     router.post('/auth/login', [UsersController, 'login'])
     router.get('/article', [ArticlesController, 'getAllArticle'])
-    router.post('/article', [ArticlesController,])
+    router.post('/article', [ArticlesController, 'publishArticles'])
+    router.get('/me',[])
   })
   .prefix('/api/v1')
 router
