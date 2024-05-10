@@ -40,7 +40,7 @@ COPY --chown=node:node . .
 # In this stage, we will start building dependencies
 FROM dependencies AS build
 
-# We run "node ace build" to build the app for production
+# We run "npm run build" to build the app for production
 RUN npm run build
 
 
@@ -66,7 +66,7 @@ ENV HOST=0.0.0.0
 COPY --chown=node:node ./package*.json ./
 
 # We run NPM CI to install the exact versions of dependencies
-RUN npm ci --production
+RUN npm ci --omit="dev"
 
 # Copy files to the working directory from the build folder the user
 COPY --chown=node:node --from=build /home/node/app/build .
