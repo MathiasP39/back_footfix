@@ -29,8 +29,9 @@ FROM base AS dependencies
 # We copy all package.* files to the working directory
 COPY --chown=node:node ./package*.json ./
 
+RUN npm cache clean --force
 # We run NPM CI to install the exact versions of dependencies
-RUN npm ci --force
+RUN npm ci
 
 # Lastly, we copy all the files with active user
 COPY --chown=node:node . .
