@@ -30,7 +30,7 @@ FROM base AS dependencies
 COPY --chown=node:node ./package*.json ./
 
 # We run NPM CI to install the exact versions of dependencies
-RUN npm ci
+RUN npm ci --force
 
 # Lastly, we copy all the files with active user
 COPY --chown=node:node . .
