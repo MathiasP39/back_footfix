@@ -25,6 +25,5 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
-EXPOSE 5432
-EXPOSE 8080
+EXPOSE 3333
 CMD ["node", "./bin/server.js"]
