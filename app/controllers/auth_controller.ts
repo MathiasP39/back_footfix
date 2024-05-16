@@ -18,10 +18,30 @@ export default class AuthController {
     try {
       const { email, password } = await request.validateUsing(LoginUserValidator)
       const user = await User.verifyCredentials(email, password)
-      auth.use('web').login(user)
-      return response.status(200).json({ message: 'Loggin success' })
+      await auth.use('web').login(user)
+      return response.status(200).json({ message: 'Login success' })
     } catch (error) {
       return response.status(401).json({ message: 'Login failed' })
+    }
+  }
+
+  async logout({ response, auth }: HttpContext) {
+    await auth.use('web').logout()
+    return response.status(200).json({ message: 'Logout succeed' })
+  }
+
+  async getInfo({ auth }: HttpContext) {
+    const user = auth.user
+    user?.fullName
+    return { fullname: user?.fullName }
+  }
+
+  async isLogin({ response, auth }: HttpContext) {
+    try {
+      await auth.authenticate()
+      return response.status(200).json({ messages: 'Check login success' })
+    } catch {
+      return response.status(401).json({ message: "User isn't loginned" })
     }
   }
 }

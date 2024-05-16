@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import CompositionsController from '#controllers/compositions_controller'
 const UsersController = () => import('#controllers/auth_controller')
 const ArticlesController = () => import('#controllers/articles_controller')
 
@@ -19,13 +20,35 @@ router.get('/', async () => {
 })
 router
   .group(() => {
-    router.post('/auth/register', [UsersController, 'register'])
-    router.post('/auth/login', [UsersController, 'login'])
-    router.get('/article', [ArticlesController, 'getAllArticle'])
-    router.post('/article', [ArticlesController, 'publishArticles'])
-    router.get('/me',[])
+    router
+      .group(() => {
+        router.post('/register', [UsersController, 'register'])
+        router.post('/login', [UsersController, 'login'])
+        router.post('/logout', [UsersController, 'logout'])
+        router.get('/check', [UsersController, 'isLogin'])
+      })
+      .prefix('/auth')
+
+    router
+      .group(() => {
+        router.post('/create', [CompositionsController, 'createComp'])
+      })
+      .prefix('composition')
+      .use(middleware.auth({ guards: ['web'] }))
+
+    router
+      .group(() => {
+        router.get('/', [ArticlesController, 'getAllArticle'])
+        router
+          .post('/publish', [ArticlesController, 'publishArticles'])
+          .use(middleware.auth({ guards: ['web'] }))
+      })
+      .prefix('/article')
+
+    router.get('/me', [UsersController, 'getInfo']).use(middleware.auth({ guards: ['web'] }))
   })
   .prefix('/api/v1')
+
 router
   .get('/connected', () => {
     return 'protected'

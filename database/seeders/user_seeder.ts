@@ -32,6 +32,13 @@ export default class extends BaseSeeder {
         email: 'antoine@dupont.fr',
         password: 'toulouse',
       },
+      {
+        id: '2',
+        fullName: 'Roussel alexandre',
+        roleId: 2,
+        email: 'alexandre@flipper.fr',
+        password: 'chat',
+      },
     ])
   }
 }

@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('title').notNullable()
+      table.string('description').notNullable()
       table.string('content').notNullable()
       table.integer('countLike').defaultTo(0)
       table.timestamp('created_at').notNullable()
