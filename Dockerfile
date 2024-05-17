@@ -26,4 +26,4 @@ WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
 EXPOSE 3333
-CMD node ./bin/server.js & node ace migration:run --force && node ace db:seed
+CMD node ./bin/server.js
