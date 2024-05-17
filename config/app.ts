@@ -35,6 +35,6 @@ export const http = defineConfig({
     maxAge: '2h',
     httpOnly: true,
     secure: app.inProduction,
-    sameSite: 'lax',
+    sameSite: 'none',
   },
 })
