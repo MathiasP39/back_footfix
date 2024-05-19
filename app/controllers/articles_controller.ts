@@ -10,7 +10,6 @@ export default class ArticlesController {
   */
   async getAllArticle({ response }: HttpContext) {
     const query = await Article.query().orderBy('created_at', 'asc')
-    console.log('Appel de getAllArticles')
     return response.status(200).json(query)
   }
   //Function that handle the creation of an article
