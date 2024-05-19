@@ -1,24 +1,15 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
-import Tag from './tag.js'
+import Joueur from './joueur.js'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 
-export default class Article extends BaseModel {
+export default class Composition extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare title: string
-
-  @column()
-  declare description: string
-
-  @column()
-  declare content: string
-
-  @column()
-  declare likeCount: number
+  declare name: string
 
   @column()
   declare author_id: string
@@ -26,11 +17,12 @@ export default class Article extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
-  @belongsTo(() => User)
-  declare author: BelongsTo<typeof User>
-
-  @manyToMany(() => Tag, {
-    pivotTable: 'article_tags',
+  @manyToMany(() => Joueur, {
+    pivotTable: 'joueurs_compositions',
+    pivotColumns: ['position_x', 'position_y', 'numero'],
   })
-  declare tags: ManyToMany<typeof Tag>
+  declare joueur: ManyToMany<typeof Joueur>
+
+  @belongsTo(() => User, { foreignKey: 'author_id', localKey: 'id' })
+  declare author: BelongsTo<typeof User>
 }

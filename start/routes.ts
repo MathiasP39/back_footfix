@@ -31,10 +31,15 @@ router
 
     router
       .group(() => {
-        router.post('/create', [CompositionsController, 'createComp'])
+        router
+          .post('/create', [CompositionsController, 'createComp'])
+          .use(middleware.auth({ guards: ['web'] }))
+        router.get('/', [CompositionsController, 'getAllComps'])
+        router
+          .get('/myComps', [CompositionsController, 'getMyComps'])
+          .use(middleware.auth({ guards: ['web'] }))
       })
       .prefix('composition')
-      .use(middleware.auth({ guards: ['web'] }))
 
     router
       .group(() => {

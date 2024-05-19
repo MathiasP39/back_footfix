@@ -8,6 +8,7 @@ export const CompositionValidator = vine.compile(
         name: vine.string(),
         positionx: vine.number(),
         positiony: vine.number(),
+        numero: vine.number(),
       })
     ),
   })

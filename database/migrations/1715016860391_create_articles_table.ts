@@ -11,8 +11,7 @@ export default class extends BaseSchema {
       table.string('content').notNullable()
       table.integer('countLike').defaultTo(0)
       table.timestamp('created_at').notNullable()
-      table.string('author_id').notNullable()
-      //table.string('author_id').references('users.id').notNullable()
+      table.string('author_id').references('users.id').notNullable()
     })
   }
 
