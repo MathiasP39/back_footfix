@@ -1,17 +1,15 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'joueurs'
+  protected tableName = 'joueur_reels'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('nom')
-      table.enu('type', ['reel,fictif'], {
-        useNative: true,
-        enumName: 'joueur_type',
-        existingType: false,
-      })
+      table.integer('joueur_id').references('joueurs.id')
+      table.integer('numero')
+      table.string('nationalite_sportive')
+      table.integer('club').references('clubs.id')
     })
   }
 
