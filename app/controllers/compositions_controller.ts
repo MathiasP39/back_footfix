@@ -1,7 +1,9 @@
+import { TypeJoueur } from '#enums/type_joueur'
 import Composition from '#models/composition'
 import Joueur from '#models/joueur'
 import { CompositionValidator } from '#validators/composition'
 import type { HttpContext } from '@adonisjs/core/http'
+import { messages } from '@vinejs/vine/defaults'
 
 export default class CompositionsController {
   async getAllComps({ response }: HttpContext) {
@@ -34,6 +36,22 @@ export default class CompositionsController {
     }
   }
 
+  async getCompByID({ params, response }: HttpContext) {
+    console.log(params.id)
+    const Compo = await Composition.query()
+      .preload('author')
+      .preload('joueur')
+      .where('id', '=', params.id)
+      .first()
+    const listeJoueur = Compo?.joueur
+    const responseData = {
+      author_name: Compo?.author.fullName,
+      compo_name: Compo?.name,
+      joueurs: listeJoueur?.map((joueur) => joueur.toJSON()),
+    }
+    return response.status(200).json(responseData)
+  }
+
   async createComp({ request, response, auth }: HttpContext) {
     try {
       const payload = request.validateUsing(CompositionValidator)
@@ -44,8 +62,7 @@ export default class CompositionsController {
           values.joueurs.map(async (joueur) => {
             const player = await Joueur.findBy({ nom: joueur.name })
             if (!player) {
-              console.log('creation d un joueur')
-              const addjoueur = Joueur.create({ nom: joueur.name })
+              const addjoueur = Joueur.create({ nom: joueur.name, type: TypeJoueur.FICTIF })
               addjoueur.then((newJoueur) => {
                 return compo.then((table) => {
                   return table.related('joueur').attach({

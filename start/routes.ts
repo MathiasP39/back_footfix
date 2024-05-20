@@ -38,6 +38,7 @@ router
         router
           .get('/myComps', [CompositionsController, 'getMyComps'])
           .use(middleware.auth({ guards: ['web'] }))
+        router.get('/:id', [CompositionsController, 'getCompByID'])
       })
       .prefix('composition')
 

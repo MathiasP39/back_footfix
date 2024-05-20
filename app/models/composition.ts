@@ -20,6 +20,10 @@ export default class Composition extends BaseModel {
   @manyToMany(() => Joueur, {
     pivotTable: 'joueurs_compositions',
     pivotColumns: ['position_x', 'position_y', 'numero'],
+    localKey: 'id',
+    relatedKey: 'id',
+    pivotForeignKey: 'composition_id',
+    pivotRelatedForeignKey: 'joueur_id',
   })
   declare joueur: ManyToMany<typeof Joueur>
 
