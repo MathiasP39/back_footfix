@@ -1,12 +1,14 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import User from '#models/user'
+import Role from '#models/role'
 
 export default class extends BaseSeeder {
   async run() {
+    const adminid = await Role.query().where('title', '=', 'admin').select('id').first()
     await User.createMany([
       {
         fullName: 'Mathias Puyfages',
-        roleId: 1,
+        roleId: adminid?.id,
         email: 'mathias@gmail.com',
         password: 'jura',
         id: 'cle',

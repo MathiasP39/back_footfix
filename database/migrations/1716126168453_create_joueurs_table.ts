@@ -7,15 +7,18 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('nom')
-      table.enu('type', ['reel,fictif'], {
+      table.enu('type', ['reel', 'fictif'], {
         useNative: true,
         enumName: 'joueur_type',
-        existingType: false,
+        existingType: true,
       })
     })
   }
 
   async down() {
     this.schema.dropTable(this.tableName)
+    this.schema.raw(`
+    DROP TYPE joueur_type;
+  `)
   }
 }
