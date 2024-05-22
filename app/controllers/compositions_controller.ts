@@ -36,7 +36,6 @@ export default class CompositionsController {
   }
 
   async getCompByID({ params, response }: HttpContext) {
-    console.log(params.id)
     const Compo = await Composition.query()
       .preload('author')
       .preload('joueur')

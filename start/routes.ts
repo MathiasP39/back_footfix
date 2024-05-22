@@ -53,6 +53,7 @@ router
         router
           .post('/publish', [ArticlesController, 'publishArticles'])
           .use(middleware.auth({ guards: ['web'] }))
+        router.get('/:id', [ArticlesController, 'getArticleById'])
       })
       .prefix('/article')
 
