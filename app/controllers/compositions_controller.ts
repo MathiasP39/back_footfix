@@ -3,7 +3,6 @@ import Composition from '#models/composition'
 import Joueur from '#models/joueur'
 import { CompositionValidator } from '#validators/composition'
 import type { HttpContext } from '@adonisjs/core/http'
-import { messages } from '@vinejs/vine/defaults'
 
 export default class CompositionsController {
   async getAllComps({ response }: HttpContext) {

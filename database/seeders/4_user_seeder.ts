@@ -7,35 +7,36 @@ export default class extends BaseSeeder {
     const adminid = await Role.query().where('title', '=', 'admin').select('id').first()
     await User.createMany([
       {
+        fullName: 'Utilisateur Supprimé',
+        roleId: 1,
+        email: 'utilisateur@supprimé.nologin',
+        password: 'motdepassetrescompliqué123456789',
+      },
+      {
         fullName: 'Mathias Puyfages',
         roleId: adminid?.id,
         email: 'mathias@gmail.com',
         password: 'jura',
-        id: 'cle',
       },
       {
         fullName: 'Exemple Test',
         roleId: 2,
         email: 'exemple@test.fr',
         password: 'exemple',
-        id: 'cle1',
       },
       {
         fullName: 'Erwan chatelet',
         roleId: 2,
         email: 'erwan@alpine.fr',
         password: 'egirl',
-        id: 'cle3',
       },
       {
-        id: '1',
         fullName: 'Dupont Antoine',
         roleId: 2,
         email: 'antoine@dupont.fr',
         password: 'toulouse',
       },
       {
-        id: '2',
         fullName: 'Roussel alexandre',
         roleId: 2,
         email: 'alexandre@flipper.fr',

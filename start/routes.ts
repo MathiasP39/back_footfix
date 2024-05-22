@@ -24,15 +24,20 @@ router
       .group(() => {
         router.post('/register', [UsersController, 'register'])
         router.post('/login', [UsersController, 'login'])
-        router.post('/logout', [UsersController, 'logout'])
+        router
+          .post('/logout', [UsersController, 'logout'])
+          .use(middleware.auth({ guards: ['web'] }))
         router.get('/check', [UsersController, 'isLogin'])
+        router
+          .delete('/suppress', [UsersController, 'suppress'])
+          .use(middleware.auth({ guards: ['web'] }))
       })
       .prefix('/auth')
 
     router
       .group(() => {
         router
-          .post('/create', [CompositionsController, 'createComp'])
+          .put('/save', [CompositionsController, 'createComp'])
           .use(middleware.auth({ guards: ['web'] }))
         router.get('/', [CompositionsController, 'getAllComps'])
         router
