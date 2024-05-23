@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.enu('type', ['reel', 'fictif'], {
         useNative: true,
         enumName: 'joueur_type',
-        existingType: false,
+        existingType: true,
       })
     })
   }
