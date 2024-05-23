@@ -11,7 +11,7 @@ export default class ArticlesController {
   async getAllArticle({ response }: HttpContext) {
     let nbElement = await Article.query().count('* as total')
     let nbPage = Math.floor(nbElement[0].$extras.total / 9) + 1
-    const query = await Article.query().orderBy('created_at', 'desc').paginate(nbPage, 9)
+    const query = await Article.query().orderBy('created_at', 'desc')
     return response.status(200).json(query)
   }
   //Function that handle the creation of an article
@@ -40,6 +40,13 @@ export default class ArticlesController {
       return response.status(204).json({ message: 'No article with this id' })
     }
   }
+
+  async getMyArticle({ response, auth }: HttpContext) {
+    const user = auth.getUserOrFail()
+    const articles = await Article.query().where('author_id', '=', user.id)
+    return response.status(200).json(articles)
+  }
+
   //Function that handle the delete of an article
   async deleteArticle({ request, response }: HttpContext) {
     console.log(request)

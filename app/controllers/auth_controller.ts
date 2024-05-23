@@ -42,7 +42,7 @@ export default class AuthController {
         .where('full_name', '=', 'Utilisateur Supprimé')
         .select('id')
         .firstOrFail()
-      const compo = await Composition.query()
+      await Composition.query()
         .where('author_id', '=', UserLogin.id)
         .update({ author_id: userGene.id })
       auth.use('web').logout()

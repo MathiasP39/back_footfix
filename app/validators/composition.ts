@@ -2,6 +2,7 @@ import vine from '@vinejs/vine'
 
 export const CompositionValidator = vine.compile(
   vine.object({
+    id: vine.number().optional(),
     name: vine.string(),
     joueurs: vine.array(
       vine.object({

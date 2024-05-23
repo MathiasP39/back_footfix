@@ -37,7 +37,7 @@ router
     router
       .group(() => {
         router
-          .put('/save', [CompositionsController, 'createComp'])
+          .put('/save', [CompositionsController, 'SaveComp'])
           .use(middleware.auth({ guards: ['web'] }))
         router.get('/', [CompositionsController, 'getAllComps'])
         router
@@ -52,6 +52,9 @@ router
         router.get('/', [ArticlesController, 'getAllArticle'])
         router
           .post('/publish', [ArticlesController, 'publishArticles'])
+          .use(middleware.auth({ guards: ['web'] }))
+        router
+          .get('/getMyArticles', [ArticlesController, 'getMyArticle'])
           .use(middleware.auth({ guards: ['web'] }))
         router.get('/:id', [ArticlesController, 'getArticleById'])
       })

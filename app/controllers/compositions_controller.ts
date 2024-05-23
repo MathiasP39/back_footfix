@@ -20,7 +20,7 @@ export default class CompositionsController {
 
   async getMyComps({ response, auth }: HttpContext) {
     if (await auth.authenticate()) {
-      const utilisateur = await auth.user
+      const utilisateur = auth.user
       if (utilisateur) {
         const Comps = await Composition.query().where('author_id', utilisateur.id)
         if (Comps) {
@@ -50,47 +50,51 @@ export default class CompositionsController {
     return response.status(200).json(responseData)
   }
 
-  async createComp({ request, response, auth }: HttpContext) {
+  async SaveComp({ request, response, auth }: HttpContext) {
     try {
-      const payload = request.validateUsing(CompositionValidator)
+      const payload = await request.validateUsing(CompositionValidator)
       const User = auth.user
       if (User) {
-        payload.then((values) => {
-          const compo = Composition.create({ name: values.name, author_id: User.id })
-          values.joueurs.map(async (joueur) => {
-            const player = await Joueur.findBy({ nom: joueur.name })
-            if (!player) {
-              const addjoueur = Joueur.create({ nom: joueur.name, type: TypeJoueur.FICTIF })
-              addjoueur.then((newJoueur) => {
-                return compo.then((table) => {
-                  return table.related('joueur').attach({
-                    [newJoueur.id]: {
-                      position_x: joueur.positionx,
-                      position_y: joueur.positiony,
-                      numero: joueur.numero,
-                    },
-                  })
-                })
-              })
-            } else {
-              compo.then((table) => {
-                return table.related('joueur').attach({
-                  [player.id]: {
-                    position_x: joueur.positionx,
-                    position_y: joueur.positiony,
-                    numero: joueur.numero,
-                  },
-                })
-              })
-            }
-          })
+        const compo = payload.id
+          ? await Composition.query().preload('joueur').where('id', '=', payload.id).firstOrFail()
+          : await Composition.create({ name: payload.name, author_id: User.id })
+        payload.joueurs.map(async (joueur) => {
+          let player = await Joueur.findBy({ nom: joueur.name })
+          console.log(player)
+          if (!player) {
+            player = await Joueur.create({ nom: joueur.name, type: TypeJoueur.FICTIF })
+          }
+          const exist = await compo
+            .related('joueur')
+            .query()
+            .where('joueur_id', '=', player.id)
+            .first()
+          if (exist) {
+            compo.related('joueur').sync(
+              {
+                [player.id]: {
+                  position_x: joueur.positionx,
+                  position_y: joueur.positiony,
+                  numero: joueur.numero,
+                },
+              },
+              false
+            )
+          } else {
+            console.log("le joueur n'existe pas")
+            compo.related('joueur').attach({
+              [player.id]: {
+                position_x: joueur.positionx,
+                position_y: joueur.positiony,
+                numero: joueur.numero,
+              },
+            })
+          }
         })
-      } else {
-        throw new Error("Can't find the authentificated user")
+        return response.status(201).json({ id: compo.id })
       }
-      return response.status(201)
-    } catch (error) {
-      console.log(error)
+    } catch (e) {
+      console.log(e)
       return response.status(400)
     }
   }
