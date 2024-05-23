@@ -1,7 +1,7 @@
 {
     "scripts": {
       "dokku": {
-        "predeploy": "echo 'Starting predeploy script...' && npm install && node ace migration:run --force && echo 'Migrations complete.' && node ace db:seed && echo 'Seeding complete.'"
+        "predeploy": "./predeploy.sh"
       }
     }
   }
