@@ -43,6 +43,9 @@ router
         router
           .get('/myComps', [CompositionsController, 'getMyComps'])
           .use(middleware.auth({ guards: ['web'] }))
+        router
+          .delete('/delete', [CompositionsController, 'deleteComposition'])
+          .use(middleware.auth({ guards: ['web'] }))
         router.get('/:id', [CompositionsController, 'getCompByID'])
       })
       .prefix('composition')
@@ -55,6 +58,9 @@ router
           .use(middleware.auth({ guards: ['web'] }))
         router
           .get('/getMyArticles', [ArticlesController, 'getMyArticle'])
+          .use(middleware.auth({ guards: ['web'] }))
+        router
+          .delete('/suppress', [ArticlesController, 'deleteArticle'])
           .use(middleware.auth({ guards: ['web'] }))
         router.get('/:id', [ArticlesController, 'getArticleById'])
       })

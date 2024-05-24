@@ -1,5 +1,6 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
+import Roles from '#enums/type_roles'
 import Article from '#models/article'
 import { ArticleValidator } from '#validators/article'
 import { HttpContext } from '@adonisjs/core/http'
@@ -48,8 +49,15 @@ export default class ArticlesController {
   }
 
   //Function that handle the delete of an article
-  async deleteArticle({ request, response }: HttpContext) {
-    console.log(request)
-    return response.status(200).json({ message: 'article successfully deleted' })
+  async deleteArticle({ request, response, auth }: HttpContext) {
+    const id = request.toJSON().body.id
+    const article = await Article.query().where('id', '=', id).firstOrFail()
+    const user = auth.user
+    if (user && (article.author_id === user.id || user.roleId === Roles.ADMIN)) {
+      await article.delete()
+      return response.status(200).json({ message: 'article successfully deleted' })
+    } else {
+      return response.status(401)
+    }
   }
 }

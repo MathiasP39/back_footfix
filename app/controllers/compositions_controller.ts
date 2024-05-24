@@ -1,4 +1,5 @@
 import { TypeJoueur } from '#enums/type_joueur'
+import Roles from '#enums/type_roles'
 import Composition from '#models/composition'
 import Joueur from '#models/joueur'
 import { CompositionValidator } from '#validators/composition'
@@ -96,6 +97,20 @@ export default class CompositionsController {
     } catch (e) {
       console.log(e)
       return response.status(400)
+    }
+  }
+
+  //Function that handle the delete of an article
+  async deleteComposition({ request, response, auth }: HttpContext) {
+    const id = request.toJSON().body.id
+    const compo = await Composition.query().preload('joueur').where('id', '=', id).firstOrFail()
+    compo.related('joueur').detach()
+    const user = auth.user
+    if (user && (compo.author_id === user.id || user.roleId === Roles.ADMIN)) {
+      await compo.delete()
+      return response.status(200).json({ message: 'article successfully deleted' })
+    } else {
+      return response.status(401)
     }
   }
 }
