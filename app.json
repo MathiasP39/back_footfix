@@ -1,7 +1,7 @@
 {
     "scripts": {
       "dokku": {
-        "predeploy": "node ace db:seed "
+        "predeploy": "echo 'predeploy' "
       }
     }
   }
