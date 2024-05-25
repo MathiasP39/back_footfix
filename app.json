@@ -1,7 +1,8 @@
 {
     "scripts": {
       "dokku": {
-        "predeploy": "/predeploy"
+        "predeploy": "node ace migration/run --force",
+        "postdeploy": "node ace db:seed"
       }
     }
   }
