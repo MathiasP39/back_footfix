@@ -1,7 +1,7 @@
 {
     "scripts": {
       "dokku": {
-        "predeploy": "/app/script/predeploy.sh"
+        "predeploy": "predeploy.sh"
       }
     }
   }
