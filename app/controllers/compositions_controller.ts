@@ -61,7 +61,6 @@ export default class CompositionsController {
           : await Composition.create({ name: payload.name, author_id: User.id })
         payload.joueurs.map(async (joueur) => {
           let player = await Joueur.findBy({ nom: joueur.name })
-          console.log(player)
           if (!player) {
             player = await Joueur.create({ nom: joueur.name, type: TypeJoueur.FICTIF })
           }
@@ -82,7 +81,6 @@ export default class CompositionsController {
               false
             )
           } else {
-            console.log("le joueur n'existe pas")
             compo.related('joueur').attach({
               [player.id]: {
                 position_x: joueur.positionx,

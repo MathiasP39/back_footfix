@@ -49,7 +49,7 @@ export default class AuthController {
       await UserLogin.delete()
       return response.status(200).json({ message: 'User deleted' })
     } else {
-      return response.status(200).json({ message: 'No users found' })
+      return response.status(400).json({ message: 'No users found' })
     }
   }
 
