@@ -2,6 +2,7 @@
 
 import Roles from '#enums/type_roles'
 import Article from '#models/article'
+import ws from '#services/ws'
 import { ArticleValidator } from '#validators/article'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -24,6 +25,7 @@ export default class ArticlesController {
         payload.then((data) => {
           Article.create({ ...data, author_id: userId })
         })
+        ws.io?.emit('ping', { message: 'A new article has been published' })
         return response.status(201).json({ message: 'Article created' })
       }
     } catch (error) {
