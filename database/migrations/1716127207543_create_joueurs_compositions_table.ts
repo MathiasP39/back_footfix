@@ -9,8 +9,8 @@ export default class extends BaseSchema {
       table.integer('composition_id').unsigned().references('compositions.id')
       table.integer('joueur_id').unsigned().references('joueurs.id')
       table.integer('numero')
-      table.integer('position_x')
-      table.integer('position_y')
+      table.double('position_x')
+      table.double('position_y')
       table.unique(['composition_id', 'joueur_id'])
     })
   }

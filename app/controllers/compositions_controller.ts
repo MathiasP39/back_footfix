@@ -41,12 +41,20 @@ export default class CompositionsController {
       .preload('author')
       .preload('joueur')
       .where('id', '=', params.id)
-      .first()
-    const listeJoueur = Compo?.joueur
+      .firstOrFail()
+    const joueursListe = await Compo.related('joueur').query().select('*')
+    console.log(joueursListe)
     const responseData = {
-      author_name: Compo?.author.fullName,
-      compo_name: Compo?.name,
-      joueurs: listeJoueur?.map((joueur) => joueur.toJSON()),
+      id: Compo.id,
+      name: Compo.name,
+      joueurs: joueursListe.map((joueur) => {
+        return {
+          id: joueur.id,
+          nom: joueur.nom,
+          positionx: joueur.$extras.pivot_position_x,
+          positiony: joueur.$extras.pivot_position_y,
+        }
+      }),
     }
     return response.status(200).json(responseData)
   }
