@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import User from '#models/user'
 const CompositionsController = () => import('#controllers/compositions_controller')
 const UsersController = () => import('#controllers/auth_controller')
 const ArticlesController = () => import('#controllers/articles_controller')
@@ -35,6 +36,11 @@ router
           .get('/isAdmin', [UsersController, 'isAdmin'])
           .use(middleware.auth({ guards: ['web'] }))
           .use(middleware.admin())
+        router
+          .get('/AllUsers', [UsersController, 'getAllUser'])
+          .use(middleware.auth({ guards: ['web'] }))
+          .use(middleware.admin())
+        router.delete('/suppressUser/:id', [UsersController, 'suppressById'])
       })
       .prefix('/auth')
 

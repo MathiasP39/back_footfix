@@ -53,6 +53,22 @@ export default class AuthController {
     }
   }
 
+  async suppressById({ params, response }: HttpContext) {
+    try {
+      const user = await User.query().where('id', '=', params.id).firstOrFail()
+      await Article.query().where('author_id', '=', user.id).delete()
+      const userGene = await User.query()
+        .where('full_name', '=', 'Utilisateur Supprimé')
+        .select('id')
+        .firstOrFail()
+      await Composition.query().where('author_id', '=', user.id).update({ author_id: userGene.id })
+      await user.delete()
+      return response.status(200).json({ message: 'User deleted' })
+    } catch (e) {
+      return response.status(400).json({ message: "Can't perform the action" })
+    }
+  }
+
   async getInfo({ auth }: HttpContext) {
     try {
       const user = auth.getUserOrFail()
@@ -77,5 +93,16 @@ export default class AuthController {
 
   async isAdmin() {
     return true
+  }
+
+  async getAllUser({ response }: HttpContext) {
+    const users = await User.query()
+      .preload('role')
+      .where('full_name', '!=', 'Utilisateur Supprimé')
+      .select('*')
+    const res = users.map((u) => {
+      return { id: u.id, name: u.fullName, role: u.role.title }
+    })
+    return response.status(200).json(res)
   }
 }
