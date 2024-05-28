@@ -25,7 +25,7 @@ const sessionConfig = defineConfig({
     path: '/',
     httpOnly: true,
     secure: false,
-    sameSite: 'lax',
+    sameSite: 'none',
   },
 
   /**
