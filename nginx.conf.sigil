@@ -1,9 +1,9 @@
 server {
-    listen <%= ENV["PORT"] %>;
-    server_name <%= ENV["DOMAIN"] %>;
+    listen 80;
+    server_name back-footfix.cluster-ig3.igpolytech.fr;
 
     location / {
-        proxy_pass http://<%= ENV["APP_HOST"] %>:<%= ENV["APP_PORT"] %>;
+        proxy_pass http://172.17.0.60;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
