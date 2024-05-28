@@ -26,7 +26,6 @@ ENV PORT=80
 ENV DOMAIN=back-footfix.cluster-ig3.igpolytech.fr
 ENV APP_HOST=0.0.0.0
 ENV APP_PORT=3333
-WORKDIR /
 WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
