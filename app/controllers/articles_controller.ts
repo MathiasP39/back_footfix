@@ -11,8 +11,6 @@ export default class ArticlesController {
   This function returns all the articles that exists through the website
   */
   async getAllArticle({ response }: HttpContext) {
-    //let nbElement = await Article.query().count('* as total')
-    //let nbPage = Math.floor(nbElement[0].$extras.total / 9) + 1
     const query = await Article.query().orderBy('created_at', 'desc')
     return response.status(200).json(query)
   }

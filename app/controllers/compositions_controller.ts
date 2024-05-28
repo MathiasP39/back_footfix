@@ -50,7 +50,7 @@ export default class CompositionsController {
       joueurs: joueursListe.map((joueur) => {
         return {
           id: joueur.id,
-          nom: joueur.nom,
+          name: joueur.nom,
           positionx: joueur.$extras.pivot_position_x,
           positiony: joueur.$extras.pivot_position_y,
         }

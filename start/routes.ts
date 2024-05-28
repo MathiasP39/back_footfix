@@ -31,6 +31,10 @@ router
         router
           .delete('/suppress', [UsersController, 'suppress'])
           .use(middleware.auth({ guards: ['web'] }))
+        router
+          .get('/isAdmin', [UsersController, 'isAdmin'])
+          .use(middleware.auth({ guards: ['web'] }))
+          .use(middleware.admin())
       })
       .prefix('/auth')
 

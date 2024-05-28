@@ -74,4 +74,8 @@ export default class AuthController {
       return response.status(401).json({ message: "User isn't loginned" })
     }
   }
+
+  async isAdmin() {
+    return true
+  }
 }
