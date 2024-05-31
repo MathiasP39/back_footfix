@@ -32,5 +32,5 @@ export default class Article extends BaseModel {
   @manyToMany(() => Tag, {
     pivotTable: 'article_tags',
   })
-  declare skills: ManyToMany<typeof Tag>
+  declare tags: ManyToMany<typeof Tag>
 }

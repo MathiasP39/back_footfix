@@ -1,8 +1,17 @@
 {
+  "name" : "back-footfix",
     "scripts": {
       "dokku": {
-        "predeploy": "node ace migration:run --force && node ace db:seed"
+        "predeploy": "node ace migration:fresh --force",
+        "postdeploy": "node ace db:seed"
       }
+    },
+    "healthcheck": {
+      "web": [{
+        "type":"startup",
+        "name": "webcheck",
+        "path": "/health/ready"
+      }]
     }
   }
   

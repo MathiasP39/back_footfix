@@ -1,5 +1,4 @@
 import env from '#start/env'
-import app from '@adonisjs/core/services/app'
 import { defineConfig, stores } from '@adonisjs/session'
 
 const sessionConfig = defineConfig({
@@ -10,7 +9,7 @@ const sessionConfig = defineConfig({
    * When set to true, the session id cookie will be deleted
    * once the user closes the browser.
    */
-  clearWithBrowser: false,
+  clearWithBrowser: true,
 
   /**
    * Define how long to keep the session data alive without
@@ -25,8 +24,8 @@ const sessionConfig = defineConfig({
   cookie: {
     path: '/',
     httpOnly: true,
-    secure: app.inProduction,
-    sameSite: 'lax',
+    secure: false,
+    sameSite: 'none',
   },
 
   /**
