@@ -12,6 +12,9 @@ export default class Article extends BaseModel {
   declare title: string
 
   @column()
+  declare description: string
+
+  @column()
   declare content: string
 
   @column()
@@ -29,5 +32,5 @@ export default class Article extends BaseModel {
   @manyToMany(() => Tag, {
     pivotTable: 'article_tags',
   })
-  declare skills: ManyToMany<typeof Tag>
+  declare tags: ManyToMany<typeof Tag>
 }

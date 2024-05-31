@@ -1,78 +1,33 @@
-################## First Stage - Creating base #########################
+FROM node:20.12.2-alpine3.18 as base
 
-# Created a variable to hold our node base image
-ARG NODE_IMAGE=node:20-alpine
-
-# Using the variable to create our base image
-FROM $NODE_IMAGE AS base
-
-# Running a command to install dumb-init to handle processes
-RUN apk --no-cache add dumb-init
-
-# Creating folders and changing ownerships
-RUN mkdir -p /home/node/app && chown node:node /home/node/app
-
-# Setting the working directory
-WORKDIR /home/node/app
-
-# Changing the current active user to "node"
-USER node
-
-# Creating a new folder "tmp"
-RUN mkdir tmp
-
-################## Second Stage - Installing dependencies ##########
-
-# In this stage, we will start installing dependencies
-FROM base AS dependencies
-
-# We copy all package.* files to the working directory
-COPY --chown=node:node ./package*.json ./
-
-# We run NPM CI to install the exact versions of dependencies
+# All deps stage
+FROM base as deps
+WORKDIR /app
+ADD package.json package-lock.json ./
 RUN npm ci
 
-# Lastly, we copy all the files with active user
-COPY --chown=node:node . .
+# Production only deps stage
+FROM base as production-deps
+WORKDIR /app
+ADD package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-################## Third Stage - Building Stage #####################
+# Build stage
+FROM base as build
+WORKDIR /app
+COPY --from=deps /app/node_modules /app/node_modules
+ADD . .
+RUN node ace build
 
-# In this stage, we will start building dependencies
-FROM dependencies AS build
-
-# We run "npm run build" to build the app for production
-RUN npm run build
-
-
-################## Final Stage - Production #########################
-
-# In this final stage, we will start running the application
-FROM base AS production
-
-# Here, we include all the required environment variables
+# Production stage
+FROM base
 ENV NODE_ENV=production
-ENV APP_KEY=KqBJqCkVId6Tvsa2tO8CsDu2C2HdewKj
-ENV PORT=3333
-ENV LOG_LEVEL=info
-ENV DB_HOST=127.0.0.1
-ENV DB_USER=mathias
-ENV DB_PASSWORD=password
-ENV DB_DATABASE=footfix
-ENV SESSION_DRIVER=cookie
-ENV DB_PORT=5432
-ENV HOST=0.0.0.0
-
-# Copy package.* to the working directory with active user
-COPY --chown=node:node ./package*.json ./
-
-# We run NPM CI to install the exact versions of dependencies
-RUN npm ci --omit="dev"
-
-# Copy files to the working directory from the build folder the user
-COPY --chown=node:node --from=build /home/node/app/build .
-
-# Expose port
+ENV PORT=80
+ENV DOMAIN=back-footfix.cluster-ig3.igpolytech.fr
+ENV APP_HOST=0.0.0.0
+ENV APP_PORT=3333
+WORKDIR /app
+COPY --from=production-deps /app/node_modules /app/node_modules
+COPY --from=build /app/build /app
 EXPOSE 3333
-
-# Run the command to start the server using "dumb-init"
-CMD [ "dumb-init", "node", "bin/server.js" ]
+CMD node ./bin/server.js

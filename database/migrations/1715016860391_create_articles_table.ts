@@ -7,11 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('title').notNullable()
-      table.string('content').notNullable()
+      table.string('description', 1000).notNullable()
+      table.string('content', 100000).notNullable()
       table.integer('countLike').defaultTo(0)
       table.timestamp('created_at').notNullable()
-      table.string('author_id').notNullable()
-      //table.string('author_id').references('users.id').notNullable()
+      table.string('author_id').references('users.id').notNullable()
     })
   }
 

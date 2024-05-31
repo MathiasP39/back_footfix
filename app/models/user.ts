@@ -39,9 +39,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Article, {
     localKey: 'id',
-    foreignKey: 'authorId',
+    foreignKey: 'author_id',
   })
-  declare artciles: HasMany<typeof Article>
+  declare articles: HasMany<typeof Article>
 
   @belongsTo(() => Role)
   declare role: BelongsTo<typeof Role>
